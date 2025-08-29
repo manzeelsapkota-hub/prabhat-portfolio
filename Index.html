@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CET138 ePortfolio - Manzeel</title>
+  <meta name="description" content="CET138 Full Stack Development ePortfolio by Manzeel">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    /* ================================
+       THEME VARIABLES (light / dark)
+       ================================ */
+    :root {
+      --bg: #ccf0ff;           /* page background */
+      --text: #212529;         /* base text */
+      --card: rgba(255,255,255,0.85);
+      --card-border: rgba(0,0,0,0.08);
+      --primary: #0d6efd;      /* Bootstrap primary */
+      --accent: #0b5ed7;       /* darker hover */
+      --muted: #6c757d;
+      --header-yellow: #71f2fd;/* header color (light) */
+    }
+
+    body.dark {
+      --bg: #0f1216;
+      --text: #e6e9ef;
+      --card: rgba(18,22,28,0.7);
+      --card-border: rgba(255,255,255,0.08);
+      --primary: #7aa2ff;
+      --accent: #a5bfff;
+      --muted: #9aa4b2;
+      --header-yellow: #f4c430; /* subtle saffron for dark */
+    }
+
+    /* Global base styles */
+    body {
+      background: var(--bg);
+      color: var(--text);
+      transition: background-color .35s ease, color .35s ease;
+      scroll-behavior: smooth;
+    }
+
+    /* Navbar */
+    .navbar {
+      transition: background-color .35s ease, box-shadow .35s ease;
+    }
+    .navbar.stuck {
+      box-shadow: 0 6px 24px rgba(0,0,0,.12);
+    }
+
+    /* Glass cards */
+    .glass-section {
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      padding: 24px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+      margin-bottom: 32px;
+      opacity: 0;
+      transform: translateY(24px);
+      animation: fadeUp .9s ease forwards;
+    }
+
+    /* Header explicitly yellow */
+    header.glass-section {
+      background: linear-gradient(135deg, var(--header-yellow), #ffe27a);
+      color: #1f2a37;
+      border: none;
+    }
+    body.dark header.glass-section { color: #0b0f14; }
+
+    /* Footer */
+    footer.glass-section {
+      background: rgba(33,37,41,.85);
+      color: #fff;
+      border-radius: 0;
+    }
+    body.dark footer.glass-section { background: rgba(25,28,33,.9); }
+
+    /* Animations */
+    @keyframes fadeUp { from {opacity:0; transform:translateY(28px)} to {opacity:1; transform:translateY(0)} }
+    .hover-lift {
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .hover-lift:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 36px rgba(0,0,0,.12);
+    }
+
+    /* Buttons: glow */
+    .btn-glow { box-shadow: 0 0 12px rgba(13,110,253,.55); transition: transform .25s, box-shadow .25s; }
+    .btn-glow:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 0 26px rgba(13,110,253,.95); }
+
+    /* Demo grid */
+    .demo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; }
+    .tile { background: #e9ecef; text-align: center; padding: 22px; border-radius: 10px; font-weight: 700; color: #34495e; }
+    body.dark .tile { background: #1f2630; color: #e0e0e0; }
+
+    .demo-toolbar { display:flex; gap:10px; align-items:center; }
+
+    .demo-cta { transition: transform .3s ease, background-color .3s ease, box-shadow .3s ease; box-shadow: 0 0 12px rgba(11,94,215,.5); }
+    .demo-cta:hover { transform: scale(1.06); background-color: var(--accent); box-shadow: 0 0 22px rgba(11,94,215,1); }
+
+    /* Back to top */
+    #backToTop { position: fixed; bottom: 30px; right: 20px; display:none; background: var(--primary); color:#fff; border-radius: 50%; padding: 12px 15px; font-size: 22px; cursor:pointer; transition: transform .3s, box-shadow .3s; z-index: 1000; box-shadow: 0 0 14px rgba(13,110,253,.6); }
+    #backToTop:hover { transform: scale(1.18); box-shadow: 0 0 28px rgba(13,110,253,1); }
+
+    /* Section images: responsive figure */
+    .topic-figure { display:grid; grid-template-columns: 110px 1fr; gap: 16px; align-items:center; }
+    @media (max-width: 576px){ .topic-figure { grid-template-columns: 1fr; } }
+    .topic-svg { width: 110px; height: 110px; border-radius: 12px; }
+
+    /* Smooth anchor offset */
+    section { scroll-margin-top: 90px; }
+
+    /* Carousel: fade + rounded */
+    #heroCarousel .carousel-inner { border-radius: 14px; overflow:hidden; }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#"><i class="fa-solid fa-layer-group me-2"></i>ePortfolio</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#fullstack">Full Stack</a></li>
+        <li class="nav-item"><a class="nav-link" href="#html">HTML</a></li>
+        <li class="nav-item"><a class="nav-link" href="#css">CSS</a></li>
+        <li class="nav-item"><a class="nav-link" href="#bootstrap">Bootstrap</a></li>
+        <li class="nav-item"><a class="nav-link" href="#javascript">JavaScript</a></li>
+      </ul>
+      <div class="ms-3 d-flex gap-2">
+        <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
+        <button id="themeToggle" class="btn btn-dark btn-sm btn-glow" title="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Login</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="loginEmail" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="loginEmail" placeholder="name@example.com">
+          </div>
+          <div class="mb-3">
+            <label for="loginPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="loginPassword">
+          </div>
+          <button type="submit" class="btn btn-primary w-100 btn-glow">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Register Modal -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title">Register</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="regName" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="regName" required>
+          </div>
+          <div class="mb-3">
+            <label for="regEmail" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="regEmail" placeholder="name@example.com" required>
+          </div>
+          <div class="mb-3">
+            <label for="regPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="regPassword" required>
+          </div>
+          <div class="mb-3">
+            <label for="regConfirm" class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" id="regConfirm" required>
+          </div>
+          <button type="submit" class="btn btn-warning w-100 btn-glow">Register</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="glass-section text-center py-5" id="home">
+  <div class="container">
+    <h1 class="fw-bold">CET138 Full Stack Development ePortfolio</h1>
+    <p class="lead mb-4">Exploring Full Stack, HTML, CSS, Bootstrap, and JavaScript with demos</p>
+
+    <!-- HERO CAROUSEL (auto slide + fade) -->
+    <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="2500">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <svg class="d-block w-100" viewBox="0 0 1200 360" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1">
+                <stop offset="0%" stop-color="#86b7fe"/>
+                <stop offset="100%" stop-color="#a9d6ff"/>
+              </linearGradient>
+            </defs>
+            <rect width="1200" height="360" fill="url(#g1)"/>
+            <text x="50%" y="55%" text-anchor="middle" fill="#083b6b" font-size="48" font-weight="700">Build for the Web</text>
+          </svg>
+        </div>
+        <div class="carousel-item">
+          <svg class="d-block w-100" viewBox="0 0 1200 360" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="g2" x1="0" x2="1">
+                <stop offset="0%" stop-color="#a3cfbb"/>
+                <stop offset="100%" stop-color="#d2f0d9"/>
+              </linearGradient>
+            </defs>
+            <rect width="1200" height="360" fill="url(#g2)"/>
+            <text x="50%" y="55%" text-anchor="middle" fill="#0b3d2e" font-size="48" font-weight="700">Clean UI & UX</text>
+          </svg>
+        </div>
+        <div class="carousel-item">
+          <svg class="d-block w-100" viewBox="0 0 1200 360" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="g3" x1="0" x2="1">
+                <stop offset="0%" stop-color="#dec0f1"/>
+                <stop offset="100%" stop-color="#f3dffb"/>
+              </linearGradient>
+            </defs>
+            <rect width="1200" height="360" fill="url(#g3)"/>
+            <text x="50%" y="55%" text-anchor="middle" fill="#4a2a5e" font-size="48" font-weight="700">Interactive Demos</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container my-5">
+
+  <!-- Welcome -->
+  <section id="welcome" class="glass-section hover-lift">
+    <div class="topic-figure">
+      <!-- Inline illustration -->
+      <svg class="topic-svg" viewBox="0 0 120 120">
+        <rect x="6" y="12" width="108" height="84" rx="12" fill="#86b7fe"/>
+        <rect x="18" y="24" width="84" height="16" rx="6" fill="#e9f2ff"/>
+        <rect x="18" y="46" width="38" height="36" rx="8" fill="#a9d6ff"/>
+        <rect x="60" y="46" width="42" height="10" rx="5" fill="#d2e9ff"/>
+        <rect x="60" y="60" width="42" height="8" rx="4" fill="#d2e9ff"/>
+        <rect x="60" y="72" width="32" height="10" rx="5" fill="#d2e9ff"/>
+      </svg>
+      <div>
+        <h2 class="h3 mb-2">Welcome to My ePortfolio</h2>
+        <p class="mb-0">This site showcases what I’ve learned in CET138: Full Stack Development. Explore each topic with visuals and hands-on demos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Full Stack -->
+  <section id="fullstack" class="glass-section hover-lift">
+    <div class="topic-figure">
+      <svg class="topic-svg" viewBox="0 0 120 120">
+        <rect x="12" y="20" width="96" height="24" rx="8" fill="#dec0f1"/>
+        <rect x="12" y="52" width="96" height="24" rx="8" fill="#a3cfbb"/>
+        <rect x="12" y="84" width="96" height="16" rx="8" fill="#86b7fe"/>
+      </svg>
+      <div>
+        <h2 class="h4">What is Full Stack Development?</h2>
+        <p class="mb-2">Full stack means building both client (front‑end) and server (back‑end), plus the glue (APIs, databases, deployment).</p>
+        <ul class="mb-0">
+          <li><strong>Front-end:</strong> HTML, CSS, JavaScript</li>
+          <li><strong>Back-end:</strong> Server logic, databases, authentication</li>
+          <li><strong>APIs:</strong> Data exchange (REST/JSON)</li>
+          <li><strong>Deployment:</strong> Hosting, domain, SSL, CI/CD</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- HTML -->
+  <section id="html" class="glass-section hover-lift">
+    <div class="topic-figure mb-3">
+      <svg class="topic-svg" viewBox="0 0 120 120">
+        <rect x="10" y="14" width="100" height="92" rx="10" fill="#ffe4a3"/>
+        <rect x="20" y="26" width="80" height="10" rx="5" fill="#fff6d6"/>
+        <rect x="20" y="42" width="60" height="10" rx="5" fill="#fff6d6"/>
+        <rect x="20" y="58" width="70" height="10" rx="5" fill="#fff6d6"/>
+      </svg>
+      <div>
+        <h2 class="h4">HTML — Structure & Semantics</h2>
+        <p class="mb-0">HTML gives structure to web pages. Semantic tags improve accessibility and SEO.</p>
+      </div>
+    </div>
+    <form class="row g-3">
+      <div class="col-md-6">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" id="name" class="form-control" required>
+      </div>
+      <div class="col-md-6">
+        <label for="emailForm" class="form-label">Email</label>
+        <input type="email" id="emailForm" class="form-control" required>
+      </div>
+      <div class="col-12">
+        <label for="message" class="form-label">Message</label>
+        <textarea id="message" class="form-control" rows="3"></textarea>
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary btn-glow">Submit</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- CSS -->
+  <section id="css" class="glass-section hover-lift">
+    <div class="topic-figure mb-3">
+      <svg class="topic-svg" viewBox="0 0 120 120">
+        <rect x="12" y="16" width="96" height="24" rx="8" fill="#86b7fe"/>
+        <rect x="12" y="48" width="96" height="24" rx="8" fill="#a9d6ff"/>
+        <rect x="12" y="80" width="96" height="24" rx="8" fill="#c9e3ff"/>
+      </svg>
+      <div>
+        <h2 class="h4 mb-1">CSS — Presentation & Layout</h2>
+        <p class="mb-0">Responsive grid, toolbars, and hover effects demonstrate modern CSS techniques.</p>
+      </div>
+    </div>
+    <div class="demo-grid">
+      <div class="tile">1</div>
+      <div class="tile">2</div>
+      <div class="tile">3</div>
+      <div class="tile">4</div>
+      <div class="tile">5</div>
+      <div class="tile">6</div>
+    </div>
+    <p class="small text-muted mt-2">Resize the window to see the grid auto‑fit.</p>
+    <div class="demo-toolbar mb-3">
+      <input type="search" class="form-control" placeholder="Search">
+      <div class="btn-group">
+        <button class="btn btn-outline-secondary btn-glow">Share</button>
+        <button class="btn btn-outline-secondary btn-glow">Export</button>
+        <button class="btn btn-outline-secondary btn-glow">More</button>
+      </div>
+    </div>
+    <a class="btn btn-primary demo-cta btn-glow" href="#">Hover me</a>
+  </section>
+
+  <!-- Bootstrap -->
+  <section id="bootstrap" class="glass-section hover-lift">
+    <div class="topic-figure mb-3">
+      <svg class="topic-svg" viewBox="0 0 120 120">
+        <circle cx="28" cy="38" r="18" fill="#7952b3"/>
+        <rect x="50" y="20" width="60" height="18" rx="9" fill="#b197fc"/>
+        <rect x="12" y="72" width="96" height="24" rx="10" fill="#d0bfff"/>
+      </svg>
+      <div>
+        <h2 class="h4 mb-1">Bootstrap 5 — Components</h2>
+        <p class="mb-0">Modal, carousel, and utility classes for faster UI building.</p>
+      </div>
+    </div>
+    <button class="btn btn-outline-primary btn-glow" data-bs-toggle="modal" data-bs-target="#demoModal">Open Modal</button>
+    <div class="modal fade" id="demoModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header"><h5 class="modal-title">Bootstrap Modal</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+          <div class="modal-body">This is a reusable dialog component.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="h5 mt-4">Carousel (Auto‑slide + Fade)</h3>
+    <div id="demoCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="2200">
+      <div class="carousel-inner rounded">
+        <div class="carousel-item active">
+          <svg class="bd-placeholder-img d-block w-100" viewBox="0 0 800 300"><rect width="100%" height="100%" fill="#86b7fe"/></svg>
+        </div>
+        <div class="carousel-item">
+          <svg class="bd-placeholder-img d-block w-100" viewBox="0 0 800 300"><rect width="100%" height="100%" fill="#a3cfbb"/></svg>
+        </div>
+        <div class="carousel-item">
+          <svg class="bd-placeholder-img d-block w-100" viewBox="0 0 800 300"><rect width="100%" height="100%" fill="#dec0f1"/></svg>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#demoCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+      <button class="carousel-control-next" type="button" data-bs-target="#demoCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+    </div>
+  </section>
+
+  <!-- JavaScript -->
+  <section id="javascript" class="glass-section hover-lift">
+    <div class="topic-figure mb-3">
+      <svg class="topic-svg" viewBox="0 0 120 120">
+        <rect x="16" y="20" width="88" height="24" rx="8" fill="#ffd43b"/>
+        <rect x="16" y="52" width="64" height="18" rx="8" fill="#ffe480"/>
+        <rect x="16" y="76" width="88" height="16" rx="8" fill="#fff1b8"/>
+      </svg>
+      <div>
+        <h2 class="h4 mb-1">JavaScript — Interactivity</h2>
+        <p class="mb-0">Click the buttons and try the calculator to see JS in action.</p>
+      </div>
+    </div>
+    <button id="helloBtn" class="btn btn-success btn-glow">Click Me</button>
+    <p id="helloOutput" class="fw-bold mt-2"></p>
+    <div class="row g-2 mt-3">
+      <div class="col-12 col-md-4"><input type="number" id="num1" class="form-control" placeholder="First"></div>
+      <div class="col-12 col-md-4"><input type="number" id="num2" class="form-control" placeholder="Second"></div>
+      <div class="col-12 col-md-4"><button id="addBtn" class="btn btn-primary w-100 btn-glow">Add</button></div>
+    </div>
+    <p id="calcOutput" class="alert alert-info mt-2">Result will appear here.</p>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="glass-section text-center">
+  <div class="container">
+    <p class="mb-2">&copy; 2025 My Fullstack ePortfolio • manzeelsapkota@gmail.com</p>
+    <div class="d-flex justify-content-center gap-3 social-icons">
+      <a href="https://wa.me/977XXXXXXXXXX" target="_blank" class="text-success fs-4"><i class="fab fa-whatsapp"></i></a>
+      <a href="https://facebook.com/" target="_blank" class="text-primary fs-4"><i class="fab fa-facebook"></i></a>
+      <a href="https://youtube.com/" target="_blank" class="text-danger fs-4"><i class="fab fa-youtube"></i></a>
+    </div>
+  </div>
+</footer>
+
+<!-- Back to Top Button -->
+<div id="backToTop" aria-label="Back to top"><i class="fa fa-arrow-up"></i></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Sticky shadow on scroll for navbar
+  const nav = document.querySelector('.navbar');
+  const onScrollNav = () => nav.classList.toggle('stuck', window.scrollY > 10);
+  window.addEventListener('scroll', onScrollNav); onScrollNav();
+
+  // Back-to-top button
+  const backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    backToTop.style.display = window.scrollY > 200 ? 'block' : 'none';
+  });
+  backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // Section reveal on viewport using IntersectionObserver
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => { if (entry.isIntersecting) entry.target.style.animationPlayState = 'running'; });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.glass-section').forEach(sec => { sec.style.animationPlayState = 'paused'; observer.observe(sec); });
+
+  // JavaScript demos
+  document.getElementById('helloBtn').addEventListener('click', () => {
+    document.getElementById('helloOutput').textContent = 'Hello, Prabhat!';
+  });
+  document.getElementById('addBtn').addEventListener('click', () => {
+    const a = Number(document.getElementById('num1').value);
+    const b = Number(document.getElementById('num2').value);
+    document.getElementById('calcOutput').textContent = 'Sum = ' + (a + b);
+  });
+
+  // Theme toggle with persisted preference
+  const themeToggle = document.getElementById('themeToggle');
+  const applyTheme = (isDark) => {
+    document.body.classList.toggle('dark', isDark);
+    themeToggle.innerHTML = isDark ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    themeToggle.classList.toggle('btn-light', isDark);
+    themeToggle.classList.toggle('btn-dark', !isDark);
+  };
+  const stored = localStorage.getItem('prefers-dark');
+  applyTheme(stored === 'true');
+  themeToggle.addEventListener('click', () => {
+    const nowDark = !document.body.classList.contains('dark');
+    applyTheme(nowDark);
+    localStorage.setItem('prefers-dark', String(nowDark));
+  });
+
+  // Optional: pause hero carousel on hover for UX
+  const hero = document.getElementById('heroCarousel');
+  hero.addEventListener('mouseenter', () => bootstrap.Carousel.getOrCreateInstance(hero).pause());
+  hero.addEventListener('mouseleave', () => bootstrap.Carousel.getOrCreateInstance(hero).cycle());
+</script>
+</body>
+</html>
